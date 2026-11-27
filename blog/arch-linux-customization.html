@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Arch Linux: Building a Minimal Workstation — V0XRYN</title>
+  <meta name="description" content="Notes on customizing Arch Linux from the ground up — window manager, dotfiles, and system tuning.">
+  <meta name="author" content="V0XRYN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://v0xryn.github.io/blog/arch-linux-customization.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://v0xryn.github.io/blog/arch-linux-customization.html">
+  <meta property="og:site_name" content="V0XRYN">
+  <meta property="og:title" content="Arch Linux: Building a Minimal Workstation — V0XRYN">
+  <meta property="og:description" content="Notes on customizing Arch Linux from the ground up — window manager, dotfiles, and system tuning.">
+  <meta property="og:image" content="https://v0xryn.github.io/assets/img/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Arch Linux: Building a Minimal Workstation — V0XRYN">
+  <meta name="twitter:description" content="Notes on customizing Arch Linux from the ground up — window manager, dotfiles, and system tuning.">
+  <meta name="twitter:image" content="https://v0xryn.github.io/assets/img/og-image.png">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="../assets/img/site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/article.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#content">Skip to content</a>
+
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav-container">
+      <a class="nav-brand" href="../index.html" aria-label="V0XRYN home">
+        <img src="../assets/img/logo.png" alt="V0XRYN brand mark" class="nav-logo-img" width="32" height="32">
+        <span class="nav-wordmark">V0XRYN</span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a class="nav-link" href="../index.html#hero">Home</a></li>
+        <li><a class="nav-link" href="../index.html#about">About</a></li>
+        <li><a class="nav-link" href="../index.html#domains">Domains</a></li>
+        <li><a class="nav-link" href="../index.html#skills">Skills</a></li>
+        <li><a class="nav-link" href="../index.html#projects">Projects</a></li>
+        <li><a class="nav-link" href="../index.html#blog">Journey</a></li>
+        <li><a class="nav-link" href="../index.html#connect">Contact</a></li>
+      </ul>
+      <div class="nav-social">
+        <a class="nav-social-link" href="https://github.com/V0XRYN" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C-4.422 18.07-3.86 17.5-3.86 17.5c-0.975-0.665 0.08-0.845 0.08-0.845 1.206 0.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-1.332-0.905-0.62 0.03-0.605 0.03-0.605 1.794 0.116 2.74 1.212 2.74 1.212 2.073 1.165 4.38 1.81 6.84 1.185 0.29-0.638 0.56-1.315 0.815-2.075-4.765-0.555-9.79-2.39-9.79-10.005 0-2.21 0.795-4.01 2.11-5.43-0.21-0.52-0.905-2.6 0.18-5.42 0 0 1.705-0.555 5.475 2.04 1.582-0.445 3.3-0.67 5.02-0.675 1.72 0.005 3.44 0.23 5.02 0.675 3.77-2.595 5.47-2.04 5.47-2.04 1.085 2.82 0.39 4.9 0.18 5.42 1.315 1.42 2.11 3.22 2.11 5.43 0 7.61-5.025 9.45-9.79 10.005 0.795 0.6 1.5 1.76 1.5 3.56 0 2.56 0 4.63 0 5.27 0 0.315 0.215 0.69 0.825 0.575 4.76-1.585 8.205-6.085 8.205-11.385 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content">
+    <article class="article-page">
+      <header class="article-header">
+        <div class="article-badge">Linux</div>
+        <h1 class="article-title">Arch Linux: Building a Minimal Workstation</h1>
+        <div class="article-meta">
+          <span>November 20, 2026</span>
+          <span>·</span>
+          <span>6 min read</span>
+        </div>
+        <p class="article-intro">Notes on customizing Arch Linux from the ground up — window manager, dotfiles, and system tuning.</p>
+      </header>
+
+      <div class="article-content">
+        <p>Arch Linux is a rolling-release distribution that gives you complete control over your system. There's no predefined desktop environment — you choose every component.</p>
+        <p>This is a working log of my setup process, not a comprehensive guide. Your hardware and preferences will differ.</p>
+        <h2>Installation</h2>
+        <p>Base system installation follows the official Arch installation guide. Key choices:</p>
+        <ul>
+          <li>Filesystem: ext4 for root, swap file instead of dedicated swap partition</li>
+          <li>Bootloader: systemd-boot for simplicity</li>
+          <li>Microcode: AMD or Intel depending on CPU</li>
+        </ul>
+        <h2>Window Manager</h2>
+        <p>I use a tiling window manager for keyboard-driven workflow. Configuration lives in dotfiles, version-controlled and deployed across machines.</p>
+        <h2>Dotfiles</h2>
+        <p>Shell configuration, editor settings, and window manager configs are tracked in a dotfiles repository. Stow or similar tools symlink them into place.</p>
+        <h2>System Tuning</h2>
+        <p>Power management, network configuration, and user services are configured to match daily usage patterns. Nothing exotic — just intentional defaults.</p>
+      </div>
+
+      <footer class="article-footer">
+        <p><a href="../index.html#blog" style="color:var(--cyan);text-decoration:none;">← Back to Journey</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="footer" aria-label="Footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <img src="../assets/img/logo.png" alt="V0XRYN" class="footer-logo-img" width="26" height="26">
+        <span class="footer-wordmark">V0XRYN</span>
+      </div>
+      <p class="footer-tagline">Explore. Build. Evolve.</p>
+      <div class="footer-social">
+        <a class="footer-social-link" href="https://github.com/V0XRYN" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C-4.422 18.07-3.86 17.5-3.86 17.5c-0.975-0.665 0.08-0.845 0.08-0.845 1.206 0.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-1.332-0.905-0.62 0.03-0.605 0.03-0.605 1.794 0.116 2.74 1.212 2.74 1.212 2.073 1.165 4.38 1.81 6.84 1.185 0.29-0.638 0.56-1.315 0.815-2.075-4.765-0.555-9.79-2.39-9.79-10.005 0-2.21 0.795-4.01 2.11-5.43-0.21-0.52-0.905-2.6 0.18-5.42 0 0 1.705-0.555 5.475 2.04 1.582-0.445 3.3-0.67 5.02-0.675 1.72 0.005 3.44 0.23 5.02 0.675 3.77-2.595 5.47-2.04 5.47-2.04 1.085 2.82 0.39 4.9 0.18 5.42 1.315 1.42 2.11 3.22 2.11 5.43 0 7.61-5.025 9.45-9.79 10.005 0.795 0.6 1.5 1.76 1.5 3.56 0 2.56 0 4.63 0 5.27 0 0.315 0.215 0.69 0.825 0.575 4.76-1.585 8.205-6.085 8.205-11.385 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+      </div>
+      <p class="footer-copy">© <span id="year"></span> V0XRYN. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

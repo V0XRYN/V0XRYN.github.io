@@ -1,6 +1,6 @@
 /* ==========================================================================
    V0XRYN — Main interactivity
-   Mobile nav, scroll effects, reveal-on-scroll, focus styles.
+   Nav scroll, scroll spy, mobile menu, reveal-on-scroll, focus styles.
    ========================================================================== */
 
 (function () {
@@ -13,6 +13,7 @@
   const navToggle = document.querySelector(".nav-toggle");
   const navMenu = document.getElementById("nav-menu");
   const navLinks = document.querySelectorAll(".nav-link");
+  const sections = document.querySelectorAll("section[id]");
 
   // ------------------------------------------------------------------
   // Navbar scroll effect
@@ -26,6 +27,45 @@
   }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  // ------------------------------------------------------------------
+  // Scroll spy — highlight active nav link based on visible section
+  // ------------------------------------------------------------------
+  function onScrollSpy() {
+    const scrollPos = window.scrollY + 100;
+
+    let current = null;
+    sections.forEach((section) => {
+      const top = section.offsetTop;
+      const bottom = top + section.offsetHeight;
+      const id = section.getAttribute("id");
+      if (scrollPos >= top && scrollPos < bottom) {
+        current = id;
+      }
+    });
+
+    navLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (href === `#${current}`) {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active");
+      }
+    });
+  }
+
+  // Throttle scroll spy
+  let ticking = false;
+  function requestScrollSpy() {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        onScrollSpy();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  window.addEventListener("scroll", requestScrollSpy, { passive: true });
 
   // ------------------------------------------------------------------
   // Mobile navigation
