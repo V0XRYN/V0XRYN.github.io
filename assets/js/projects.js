@@ -126,7 +126,8 @@
       if (!res.ok) throw new Error("GitHub API responded " + res.status);
       const repos = await res.json();
       const projects = repos
-        .filter((r) => !r.fork)
+        .filter((r) => !r.fork) // exclude forked repos entirely
+        .filter((r) => r.owner?.login === GITHUB_USER) // only repos owned by V0XRYN
         .filter((r) => !EXCLUDED.has(r.name))
         .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
         .slice(0, PROJECTS_LIMIT);
