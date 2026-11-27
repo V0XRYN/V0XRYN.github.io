@@ -973,6 +973,16 @@ h1, h2, h3, .nav-wordmark, .footer-wordmark {
   color: var(--text-dim);
 }
 
+/* Private project status */
+.project-status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cyan);
+  margin: 0 0 0.5rem;
+}
+
 /* Private source link styling (replaces "View on GitHub") */
 .project-source-private {
   display: inline-flex;

@@ -39,44 +39,32 @@
   const FEATURED = (window.V0XRYN_FEATURED || []).slice();
 
   // Manual private projects configuration.
-  // Add entries here for private repositories you want to showcase.
+  // Discovered from GitHub private repositories (read-only, no API keys exposed).
   // None of these fields expose repository URLs, tokens, or credentials.
   const PRIVATE_PROJECTS = [
     {
       id: "private-001",
-      name: "V0XRYN Core Framework",
-      description: "Internal development framework powering V0XRYN tooling and automation.",
+      name: "V0XRYN-WEB",
+      description: "Media web app and native Android client for movies, series, anime, live TV and music.",
       category: "web",
-      language: "TypeScript",
-      topics: ["framework", "internal", "tooling"],
+      language: "JavaScript",
+      topics: ["web", "entertainment", "android", "streaming"],
       status: "Active",
-      logo: "assets/img/logos/private-core.svg",
+      logo: "assets/img/logos/placeholder.svg",
       stars: 0,
-      updated: "2 months ago"
+      updated: "2 weeks ago"
     },
     {
       id: "private-002",
-      name: "SecureLab CLI",
-      description: "Command-line interface for controlled security lab environments.",
+      name: "Discord-Security-Bot",
+      description: "Discord server security bot for moderation and protection.",
       category: "security",
-      language: "Go",
-      topics: ["security", "cli", "lab"],
-      status: "Beta",
-      logo: "assets/img/logos/private-securelab.svg",
-      stars: 0,
-      updated: "1 month ago"
-    },
-    {
-      id: "private-003",
-      name: "Neural Link Agent",
-      description: "Experimental local AI agent for autonomous task execution.",
-      category: "ai",
       language: "Python",
-      topics: ["ai", "agent", "automation", "local-llm"],
-      status: "Prototype",
-      logo: "assets/img/logos/private-neural.svg",
+      topics: ["discord", "security", "bot"],
+      status: "Active",
+      logo: "assets/img/logos/placeholder.svg",
       stars: 0,
-      updated: "3 weeks ago"
+      updated: "4 months ago"
     }
   ];
 
@@ -246,8 +234,8 @@
     const lang = isPrivate ? (repo.language || "Code") : (repo.language || "Code");
     const desc = escapeHtml(repo.description || "No description available.");
     const name = escapeHtml(repo.name);
-    const stars = repo.stargazers_count || 0;
-    const updated = repo.updated_at ? relativeDate(repo.updated_at) : "";
+    const stars = isPrivate ? (repo.stars || 0) : (repo.stargazers_count || 0);
+    const updated = isPrivate ? (repo.updated || "") : (repo.updated_at ? relativeDate(repo.updated_at) : "");
     const tags = (repo.topics || []).slice(0, 3);
     const langColor = languageColor(lang);
     const imgSrc = isPrivate ? privateProjectLogo(repo) : projectLogo(repo, repo.name);
@@ -262,7 +250,8 @@
     return `
       <article class="project-card reveal${isPrivate ? " project-card-private" : ""}" data-category="${cat}" data-id="${escapeHtml(repo.id || name)}">
         <div class="project-preview" aria-hidden="true">
-          <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" decoding="async" width="300" height="180">
+          <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" decoding="async" width="300" height="180"
+            onerror="this.onerror=null; this.src='assets/img/logos/placeholder.svg'">
         </div>
         ${privateBadge}
         <div class="project-content">
@@ -271,6 +260,7 @@
             <span class="project-language" style="color:${langColor}">● ${escapeHtml(lang)}</span>
           </div>
           <h3 class="project-title">${name}</h3>
+          ${isPrivate && repo.status ? `<p class="project-status">${escapeHtml(repo.status)}</p>` : ""}
           <p class="project-desc">${desc}</p>
           <div class="project-footer">
             <div class="project-meta">
