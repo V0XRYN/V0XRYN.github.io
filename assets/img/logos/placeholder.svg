@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180" viewBox="0 0 300 180">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F1420"/>
+      <stop offset="100%" stop-color="#1B1F2B"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2B8CFF"/>
+      <stop offset="100%" stop-color="#3BD4FF"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="300" height="180" rx="14" fill="url(#bgGrad)"/>
+  <rect width="300" height="180" rx="14" fill="none" stroke="rgba(43, 140, 255, 0.12)" stroke-width="1"/>
+  
+  <!-- Accent corner accent -->
+  <path d="M0 0 L60 0 L0 60 Z" fill="url(#accentGrad)" opacity="0.15"/>
+  <path d="M300 180 L240 180 L300 120 Z" fill="url(#accentGrad)" opacity="0.1"/>
+  
+  <!-- V0XRYN brand mark -->
+  <text x="150" y="95" font-family="'Orbitron', 'Inter', sans-serif" font-size="34" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">V0XRYN</text>
+  <text x="150" y="130" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#3BD4FF" text-anchor="middle" letter-spacing="2">Project Preview</text>
+  
+  <!-- Decorative dots -->
+  <circle cx="70" cy="40" r="3" fill="#2B8CFF" opacity="0.6"/>
+  <circle cx="230" cy="140" r="2.5" fill="#3BD4FF" opacity="0.5"/>
+  <circle cx="40" cy="140" r="2" fill="#2B8CFF" opacity="0.4"/>
+</svg>

@@ -3,6 +3,7 @@
    Fetches real public projects from GitHub. Falls back to a local list if
    the API is unreachable. Supports manual featured/pinned projects via
    window.V0XRYN_FEATURED array.
+   Also renders manually configured private projects in a separate section.
    ========================================================================== */
 
 (function () {
@@ -15,6 +16,12 @@
   const ERROR = document.getElementById("projects-error");
   const NOTE = document.getElementById("projects-note");
   const FILTER_BTNS = document.querySelectorAll(".filter-btn");
+
+  // Private Projects section elements
+  const PRIVATE_GRID = document.getElementById("private-projects-grid");
+  const PRIVATE_LOADING = document.getElementById("private-projects-loading");
+  const PRIVATE_ERROR = document.getElementById("private-projects-error");
+  const PRIVATE_NOTE = document.getElementById("private-projects-note");
 
   // Repos we deliberately exclude (non-project / TOS-blocked / profile config)
   const EXCLUDED = new Set([
@@ -30,6 +37,48 @@
 
   // Manual featured projects — add repo names here to pin them regardless of recency
   const FEATURED = (window.V0XRYN_FEATURED || []).slice();
+
+  // Manual private projects configuration.
+  // Add entries here for private repositories you want to showcase.
+  // None of these fields expose repository URLs, tokens, or credentials.
+  const PRIVATE_PROJECTS = [
+    {
+      id: "private-001",
+      name: "V0XRYN Core Framework",
+      description: "Internal development framework powering V0XRYN tooling and automation.",
+      category: "web",
+      language: "TypeScript",
+      topics: ["framework", "internal", "tooling"],
+      status: "Active",
+      logo: "assets/img/logos/private-core.svg",
+      stars: 0,
+      updated: "2 months ago"
+    },
+    {
+      id: "private-002",
+      name: "SecureLab CLI",
+      description: "Command-line interface for controlled security lab environments.",
+      category: "security",
+      language: "Go",
+      topics: ["security", "cli", "lab"],
+      status: "Beta",
+      logo: "assets/img/logos/private-securelab.svg",
+      stars: 0,
+      updated: "1 month ago"
+    },
+    {
+      id: "private-003",
+      name: "Neural Link Agent",
+      description: "Experimental local AI agent for autonomous task execution.",
+      category: "ai",
+      language: "Python",
+      topics: ["ai", "agent", "automation", "local-llm"],
+      status: "Prototype",
+      logo: "assets/img/logos/private-neural.svg",
+      stars: 0,
+      updated: "3 weeks ago"
+    }
+  ];
 
   // GitHub linguistics language colors (concise, commonly used)
   const LANGUAGE_COLORS = {
@@ -135,6 +184,10 @@
     return "all";
   }
 
+  function categoryForPrivate(project) {
+    return project.category || "all";
+  }
+
   function relativeDate(isoString) {
     const date = new Date(isoString);
     const now = new Date();
@@ -158,19 +211,60 @@
     return LANGUAGE_COLORS[language] || "#8B97A8";
   }
 
-  function renderCard(repo) {
-    const cat = categoryFor(repo);
-    const lang = repo.language || "Code";
+  // Return a logo/preview image path for a project.
+  // Public repos may carry a custom logo via repo.homepage or a topics-based hint.
+  // Falls back to a branded placeholder with the project's initials.
+  function projectLogo(repo, fallbackName) {
+    // Custom logo path can be embedded via a topic like "logo:assets/img/logos/name.svg"
+    const logoTopic = (repo.topics || []).find((t) => t.startsWith("logo:"));
+    if (logoTopic) {
+      return logoTopic.replace("logo:", "");
+    }
+    // Otherwise fall back to the branded placeholder
+    return `assets/img/logos/placeholder.svg?name=${encodeURIComponent(fallbackName || repo.name)}`;
+  }
+
+  // Return a logo/preview image path for a private project.
+  function privateProjectLogo(project) {
+    if (project.logo) {
+      return project.logo;
+    }
+    return `assets/img/logos/placeholder.svg?name=${encodeURIComponent(project.name)}`;
+  }
+
+  function initials(name) {
+    return name
+      .split(/[\s\-_]+/)
+      .map((w) => w.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join("");
+  }
+
+  function renderCard(repo, options = {}) {
+    const { isPrivate = false } = options;
+    const cat = isPrivate ? categoryForPrivate(repo) : categoryFor(repo);
+    const lang = isPrivate ? (repo.language || "Code") : (repo.language || "Code");
     const desc = escapeHtml(repo.description || "No description available.");
     const name = escapeHtml(repo.name);
     const stars = repo.stargazers_count || 0;
     const updated = repo.updated_at ? relativeDate(repo.updated_at) : "";
     const tags = (repo.topics || []).slice(0, 3);
     const langColor = languageColor(lang);
+    const imgSrc = isPrivate ? privateProjectLogo(repo) : projectLogo(repo, repo.name);
+    const imgAlt = `Preview for ${name}`;
+    const privateBadge = isPrivate
+      ? `<span class="project-badge project-badge-private" title="Private repository">PRIVATE</span>`
+      : "";
+    const sourceLink = isPrivate
+      ? `<span class="project-source-private">Private Repository</span>`
+      : `<a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link">View on GitHub <span aria-hidden="true">→</span></a>`;
 
     return `
-      <article class="project-card reveal" data-category="${cat}">
-        <div class="project-preview" aria-hidden="true"></div>
+      <article class="project-card reveal${isPrivate ? " project-card-private" : ""}" data-category="${cat}" data-id="${escapeHtml(repo.id || name)}">
+        <div class="project-preview" aria-hidden="true">
+          <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" decoding="async" width="300" height="180">
+        </div>
+        ${privateBadge}
         <div class="project-content">
           <div class="project-header">
             <span class="project-category">${escapeHtml(cat.charAt(0).toUpperCase() + cat.slice(1))}</span>
@@ -186,9 +280,7 @@
             <div class="project-tags">
               ${tags.map((t) => `<span>${escapeHtml(t)}</span>`).join("")}
             </div>
-            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link">
-              View on GitHub <span aria-hidden="true">→</span>
-            </a>
+            ${sourceLink}
           </div>
         </div>
       </article>
@@ -211,6 +303,24 @@
       NOTE.textContent = `Showing ${projects.length} project${projects.length !== 1 ? "s" : ""}.`;
       NOTE.style.display = "block";
       NOTE.style.color = "var(--text-dim)";
+    }
+  }
+
+  function renderPrivateProjects(projects) {
+    if (!PRIVATE_GRID || !PRIVATE_NOTE) return;
+    if (PRIVATE_LOADING) PRIVATE_LOADING.style.display = "none";
+    if (PRIVATE_ERROR) PRIVATE_ERROR.style.display = "none";
+    PRIVATE_GRID.innerHTML = projects.map((p) => renderCard(p, { isPrivate: true })).join("");
+    // Trigger reveal animation
+    requestAnimationFrame(() => {
+      document.querySelectorAll(".project-card.reveal").forEach((el, i) => {
+        setTimeout(() => el.classList.add("visible"), i * 100);
+      });
+    });
+    if (PRIVATE_NOTE) {
+      PRIVATE_NOTE.textContent = `Showing ${projects.length} private project${projects.length !== 1 ? "s" : ""}.`;
+      PRIVATE_NOTE.style.display = "block";
+      PRIVATE_NOTE.style.color = "var(--text-dim)";
     }
   }
 
@@ -261,11 +371,16 @@
 
       projects = projects.slice(0, PROJECTS_LIMIT);
       renderProjects(projects.length ? projects : FALLBACK);
+
+      // Render private projects after public projects are rendered
+      renderPrivateProjects(PRIVATE_PROJECTS);
     } catch (err) {
       console.error("Failed to fetch projects:", err);
       if (LOADING) LOADING.style.display = "none";
       if (ERROR) ERROR.style.display = "block";
       renderProjects(FALLBACK);
+      // Still render private projects even if public fetch fails
+      renderPrivateProjects(PRIVATE_PROJECTS);
     }
   }
 

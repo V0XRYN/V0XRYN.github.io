@@ -919,6 +919,79 @@ h1, h2, h3, .nav-wordmark, .footer-wordmark {
   margin-top: 1rem;
 }
 
+/* ======================== Project Previews ======================== */
+.project-preview {
+  height: 200px;
+  background: var(--navy);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.project-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform var(--transition);
+}
+
+.project-card:hover .project-preview img {
+  transform: scale(1.03);
+}
+
+.project-preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(43, 140, 255, 0.08), rgba(59, 212, 255, 0.04));
+}
+
+/* PRIVATE badge on project cards */
+.project-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.project-badge-private {
+  background: var(--blue);
+  color: #000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.project-card-private .project-language {
+  color: var(--text-dim);
+}
+
+/* Private source link styling (replaces "View on GitHub") */
+.project-source-private {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Private Projects section header tweaks */
+.private-projects-section .section-sub {
+  color: var(--text-muted);
+}
+
+.private-projects-section .projects-header {
+  text-align: center;
+}
+
 /* ======================== Blog ======================== */
 .blog-controls {
   display: flex;
