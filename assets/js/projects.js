@@ -20,8 +20,6 @@
   const PRIVATE_GRID = document.getElementById("private-projects-grid");
   const PRIVATE_LOADING = document.getElementById("private-projects-loading");
   const NOTE = document.getElementById("projects-note");
-  const FILTER_BTNS = document.querySelectorAll(".filter-btn");
-  const TOGGLE_BTNS = document.querySelectorAll(".toggle-btn");
   const GROUP_PUBLIC = document.getElementById("group-public");
   const GROUP_PRIVATE = document.getElementById("group-private");
 
@@ -168,7 +166,7 @@
       tags: ["web", "entertainment", "android", "streaming", "typescript"],
       logo: "assets/img/logos/v0xryn-web-preview.png",
       liveUrl: "https://bl4ck4rchl1nux-web.onrender.com/",
-      previewType: "iframe",
+      previewType: "image",
       repoUrl: "https://github.com/V0XRYN/V0XRYN-WEB",
       technologies: ["TypeScript", "React", "Node.js", "Tailwind CSS", "FFmpeg"],
       features: [
@@ -178,7 +176,8 @@
         "Offline download support",
         "Real-time chat integration"
       ],
-      isPrivate: true
+      isPrivate: false,
+      updated_at: "2026-11-28T00:00:00Z"
     },
     "Discord-Security-Bot": {
       featured: true,
@@ -337,8 +336,9 @@
       ? `<a href="mailto:${escapeHtml(project.mailto)}?subject=Project%20Inquiry:%20${encodeURIComponent(project.name)}" class="project-link project-link-primary">Request Details <span aria-hidden="true">→</span></a>`
       : `<span class="project-source-private">Private Repository</span>`;
 
+    const isFeaturedPrivate = FEATURED_PROJECTS[project.name];
     return `
-      <article class="project-card reveal project-card-private" data-category="${cat}" data-id="${escapeHtml(project.slug)}" data-scope="private">
+      <article class="project-card reveal project-card-private" data-category="${cat}" data-id="${escapeHtml(project.slug)}" data-scope="private" ${isFeaturedPrivate ? 'data-featured="true"' : ''}>
         <div class="project-preview" aria-hidden="true">
           ${previewContent}
         </div>
@@ -365,7 +365,7 @@
   // Project detail modal for featured projects
   function createProjectModal(project) {
     const modalId = `modal-${project.name.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase()}`;
-    const cat = project.featured ? project.category : categoryFor(project);
+    const cat = normalizeCategory(project.featured ? project.category : categoryFor(project));
     const tags = project.tags || (project.topics || []).slice(0, 6);
     const technologies = project.technologies || [];
     const features = project.features || [];
@@ -385,7 +385,6 @@
                 : `<img src="${escapeHtml(project.logo)}" alt="${escapeHtml(`Cover for ${project.name}`)}" loading="lazy">`
               }
               ${project.status ? `<span class="project-badge ${isLive ? "project-badge-live" : "project-badge-private"}">${escapeHtml(project.status)}</span>` : ""}
-              ${isPrivate ? `<span class="project-badge project-badge-private">PRIVATE</span>` : ""}
             </div>
             <div class="modal-body">
               <div class="modal-header">
@@ -585,10 +584,32 @@
 
   function updateNote() {
     if (!NOTE) return;
-    const visiblePublic = PUBLIC_GRID ? PUBLIC_GRID.querySelectorAll('.project-card[data-scope="public"]:not([style*="display: none"])').length : 0;
-    const visiblePrivate = PRIVATE_GRID ? PRIVATE_GRID.querySelectorAll('.project-card[data-scope="private"]:not([style*="display: none"])').length : 0;
+    // GROUP_PUBLIC.style.display === "none" means public is HIDDEN
+    // GROUP_PRIVATE.style.display === "none" means private is HIDDEN
+    const publicGroupHidden = GROUP_PUBLIC?.style.display === "none";
+    const privateGroupHidden = GROUP_PRIVATE?.style.display === "none";
+    
+    // Filter by visible category
+    const activeFilter = document.querySelector(".filter-btn.active")?.dataset.filter || "all";
+    
+    const getVisibleCount = (grid, scope) => {
+      if (!grid) return 0;
+      const cards = grid.querySelectorAll(`.project-card[data-scope="${scope}"]`);
+      let count = 0;
+      cards.forEach(card => {
+        const cat = card.dataset.category;
+        if (activeFilter === "all" || cat === activeFilter) {
+          const display = window.getComputedStyle(card).display;
+          if (display !== "none") count++;
+        }
+      });
+      return count;
+    };
+    
+    const visiblePublic = publicGroupHidden ? 0 : getVisibleCount(PUBLIC_GRID, "public");
+    const visiblePrivate = privateGroupHidden ? 0 : getVisibleCount(PRIVATE_GRID, "private");
     const total = visiblePublic + visiblePrivate;
-    const scope = GROUP_PRIVATE?.style.display === "none" ? "public" : (GROUP_PUBLIC?.style.display === "none" ? "private" : "all");
+    const scope = publicGroupHidden ? "private" : (privateGroupHidden ? "public" : "all");
     let label = "";
     if (scope === "public") label = `${visiblePublic} public project${visiblePublic !== 1 ? "s" : ""}`;
     else if (scope === "private") label = `${visiblePrivate} private project${visiblePrivate !== 1 ? "s" : ""}`;
@@ -599,8 +620,9 @@
   }
 
   function setupFilters() {
-    // Remove existing listeners by cloning
-    FILTER_BTNS.forEach((btn) => {
+    // Re-query buttons each time (handles dynamic content)
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    filterBtns.forEach((btn) => {
       const newBtn = btn.cloneNode(true);
       btn.parentNode.replaceChild(newBtn, btn);
     });
@@ -627,7 +649,8 @@
   }
 
   function setupToggle() {
-    TOGGLE_BTNS.forEach((btn) => {
+    const toggleBtns = document.querySelectorAll(".toggle-btn");
+    toggleBtns.forEach((btn) => {
       const newBtn = btn.cloneNode(true);
       btn.parentNode.replaceChild(newBtn, btn);
     });
@@ -673,7 +696,9 @@
     } catch (err) {
       console.error("Failed to load private projects:", err);
       if (PRIVATE_LOADING) PRIVATE_LOADING.style.display = "none";
-      if (PRIVATE_GRID) PRIVATE_GRID.innerHTML = "";
+      if (PRIVATE_GRID) {
+        PRIVATE_GRID.innerHTML = '<p class="projects-note">Private projects could not be loaded.</p>';
+      }
     }
   }
 
@@ -692,7 +717,6 @@
     if (!PUBLIC_GRID || !PUBLIC_LOADING) return;
 
     let apiProjects = [];
-    let apiFailed = false;
 
     try {
       const controller = new AbortController();
@@ -729,10 +753,10 @@
       apiProjects = apiProjects.slice(0, PROJECTS_LIMIT);
     } catch (err) {
       console.warn("GitHub API unavailable, using JSON fallback:", err.message);
-      apiFailed = true;
+      // Continue with empty API projects - fallback will handle rendering
     }
 
-    // Load JSON fallback
+    // Load JSON fallback (always succeeds on GitHub Pages)
     const fallbackProjects = await loadPublicFallback();
 
     // Merge: prefer API projects, but include JSON projects not already present
@@ -751,10 +775,30 @@
           forks_count: 0,
           open_issues_count: 0
         });
+        apiNames.add(fb.name);
       }
     }
 
-    // If API failed and no fallback projects, show empty state silently
+    // Inject featured projects that aren't already present (ensures they render
+    // even when the GitHub API is unavailable)
+    for (const [name, feat] of Object.entries(FEATURED_PROJECTS)) {
+      if (!feat.isPrivate && !apiNames.has(name)) {
+        merged.push({
+          name: feat.name,
+          description: feat.tagline + " " + feat.description,
+          language: "Code",
+          html_url: feat.repoUrl || `https://github.com/${GITHUB_USER}/${name}`,
+          stargazers_count: 0,
+          updated_at: feat.updated_at || new Date().toISOString(),
+          topics: feat.tags,
+          forks_count: 0,
+          open_issues_count: 0
+        });
+        apiNames.add(name);
+      }
+    }
+
+    // Always render with merged projects (API + fallback)
     renderProjects(merged.length ? merged : fallbackProjects, false);
   }
 
