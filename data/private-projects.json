@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "v0xryn-web",
+    "name": "V0XRYN-WEB",
+    "tagline": "Modern streaming platform for immersive entertainment.",
+    "description": "A modern streaming platform built to deliver an immersive entertainment experience. Features a responsive web interface with live content streaming capabilities.",
+    "tags": ["web", "entertainment", "android", "streaming"],
+    "category": "web",
+    "status": "LIVE",
+    "logo": "assets/img/logos/v0xryn-web-preview.png",
+    "mailto": "v0xryn.null@gmail.com",
+    "liveUrl": "https://bl4ck4rchl1nux-web.onrender.com/",
+    "previewType": "iframe"
+  },
+  {
+    "slug": "discord-security-bot",
+    "name": "Discord-Security-Bot",
+    "tagline": "Intelligent Discord security bot for community protection.",
+    "description": "An intelligent Discord security bot designed to protect, moderate and manage communities. Includes automated threat detection, moderation tools, and security analytics.",
+    "tags": ["discord", "security", "bot", "python"],
+    "category": "security",
+    "status": "PRIVATE",
+    "logo": "assets/img/logos/discord-security-bot.svg",
+    "mailto": "v0xryn.null@gmail.com"
+  }
+]

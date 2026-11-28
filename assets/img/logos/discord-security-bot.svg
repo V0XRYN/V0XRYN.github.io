@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0E17"/>
+      <stop offset="50%" stop-color="#131A2A"/>
+      <stop offset="100%" stop-color="#0A0E17"/>
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B1F2B"/>
+      <stop offset="100%" stop-color="#0F1420"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2B8CFF"/>
+      <stop offset="100%" stop-color="#3BD4FF"/>
+    </linearGradient>
+    <filter id="glowBlue" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="24" result="blur"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="675" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid pattern -->
+  <rect width="1200" height="675" fill="none" stroke="rgba(43, 140, 255, 0.06)" stroke-width="1"/>
+  <g stroke="rgba(59, 212, 255, 0.04)" stroke-width="1">
+    <path d="M0 60 L1200 60 M0 240 L1200 240 M0 420 L1200 420 M0 600 L1200 600"/>
+    <path d="M200 0 L200 675 M400 0 L400 675 M600 0 L600 675 M800 0 L800 675 M1000 0 L1000 675"/>
+  </g>
+
+  <!-- Corner accent elements -->
+  <path d="M0 0 L120 0 L0 120 Z" fill="url(#accentGrad)" opacity="0.12"/>
+  <path d="M1200 675 L1080 675 L1200 555 Z" fill="url(#accentGrad)" opacity="0.08"/>
+
+  <!-- Discord logo mark (top left decorative) -->
+  <g transform="translate(60, 60) scale(1.4)">
+    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#2B8CFF"/>
+    <path d="M12 17.77L12 12L12 2Z" fill="#3BD4FF" opacity="0.8"/>
+  </g>
+
+  <!-- Central shield badge -->
+  <g transform="translate(540, 180)">
+    <!-- Outer glow -->
+    <circle cx="60" cy="95" r="95" fill="none" stroke="url(#accentGrad)" stroke-width="2" opacity="0.3" filter="url(#softGlow)"/>
+    <!-- Shield body -->
+    <path d="M60 30 L145 30 Q160 30 165 40 L175 110 L175 160 Q175 180 160 190 L60 210 L-40 190 Q-55 180 -55 160 L-55 110 L-45 40 Q-40 30 -30 30 Z" fill="url(#shieldGrad)" stroke="url(#accentGrad)" stroke-width="2"/>
+    <!-- Inner shield glow -->
+    <path d="M60 38 L138 38 Q150 38 153 46 L160 100 L160 145 Q160 160 148 168 L60 184 L-28 168 Q-40 160 -40 145 L-40 100 L-25 46 Q-22 38 -8 38 Z" fill="none" stroke="#2B8CFF" stroke-width="1" opacity="0.4"/>
+    <!-- Security lock icon -->
+    <g transform="translate(30, 70)">
+      <rect x="18" y="22" width="24" height="24" rx="6" fill="#2B8CFF" opacity="0.9"/>
+      <rect x="24" y="46" width="12" height="16" rx="2" fill="#3BD4FF"/>
+      <circle cx="36" cy="34" r="4" fill="#0A0E17"/>
+      <path d="M24 22 L36 22 L36 46 L48 46 L48 22 L72 22 L72 50 Q72 62 60 70 L48 62 Q36 62 36 50 L24 50 Q24 62 12 70 L0 62 Q-12 62 -12 50 L-12 22 L12 22 Z" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.9"/>
+    </g>
+    <!-- "SEC" text on shield -->
+    <text x="60" y="130" font-family="'Orbitron', sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">SEC</text>
+    <text x="60" y="148" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#3BD4FF" text-anchor="middle" letter-spacing="1">DISCORD</text>
+  </g>
+
+  <!-- Robot head icon (right side) -->
+  <g transform="translate(980, 220)">
+    <circle cx="60" cy="55" r="50" fill="#131A2A" stroke="#2B8CFF" stroke-width="2"/>
+    <circle cx="60" cy="55" r="44" fill="none" stroke="#3BD4FF" stroke-width="1" opacity="0.5"/>
+    <!-- Eyes -->
+    <rect x="30" y="40" width="14" height="14" rx="2" fill="#2B8CFF" filter="url(#glowBlue)"/>
+    <rect x="76" y="40" width="14" height="14" rx="2" fill="#2B8CFF" filter="url(#glowBlue)"/>
+    <!-- Mouth -->
+    <path d="M40 70 Q60 80 80 70" fill="none" stroke="#3BD4FF" stroke-width="2" stroke-linecap="round"/>
+    <!-- Antenna -->
+    <line x1="60" y1="15" x2="60" y2="0" stroke="#2B8CFF" stroke-width="3"/>
+    <circle cx="60" cy="0" r="6" fill="#3BD4FF" filter="url(#glowBlue)"/>
+  </g>
+
+  <!-- V0XRYN brand mark (bottom right) -->
+  <g transform="translate(1020, 590)">
+    <text x="0" y="28" font-family="'Orbitron', sans-serif" font-size="24" font-weight="700" fill="#FFFFFF" letter-spacing="3">V0XRYN</text>
+    <text x="0" y="50" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#3BD4FF" letter-spacing="1">Discord Security</text>
+  </g>
+
+  <!-- Decorative tech dots -->
+  <circle cx="1100" cy="100" r="3" fill="#2B8CFF" opacity="0.7"/>
+  <circle cx="100" cy="550" r="2.5" fill="#3BD4FF" opacity="0.6"/>
+  <circle cx="300" cy="80" r="2" fill="#2B8CFF" opacity="0.5"/>
+  <circle cx="900" cy="500" r="3" fill="#3BD4FF" opacity="0.7"/>
+</svg>

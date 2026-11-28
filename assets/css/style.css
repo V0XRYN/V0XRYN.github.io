@@ -800,18 +800,41 @@ h1, h2, h3, .nav-wordmark, .footer-wordmark {
   transform: translateY(-6px);
 }
 
+/* ======================== Project Previews (Unified) ======================== */
 .project-preview {
-  height: 180px;
+  height: 220px;
   background: var(--navy);
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
+}
+
+.project-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform var(--transition);
+}
+
+.project-preview iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: var(--navy);
+}
+
+.project-card:hover .project-preview img {
+  transform: scale(1.03);
 }
 
 .project-preview::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(43, 140, 255, 0.1), rgba(59, 212, 255, 0.05));
+  background: linear-gradient(135deg, rgba(43, 140, 255, 0.08), rgba(59, 212, 255, 0.04));
 }
 
 .project-content {
@@ -919,34 +942,65 @@ h1, h2, h3, .nav-wordmark, .footer-wordmark {
   margin-top: 1rem;
 }
 
-/* ======================== Project Previews ======================== */
-.project-preview {
-  height: 200px;
-  background: var(--navy);
-  position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
+/* ======================== Public/Private Toggle ======================== */
+.project-toggle {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
 }
 
-.project-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  transition: transform var(--transition);
+.toggle-btn {
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.project-card:hover .project-preview img {
-  transform: scale(1.03);
+.toggle-btn:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
 }
 
-.project-preview::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(43, 140, 255, 0.08), rgba(59, 212, 255, 0.04));
+.toggle-btn.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #000;
+  box-shadow: var(--blue-glow);
 }
+
+/* ======================== Project Groups ======================== */
+.project-group {
+  margin-top: 2rem;
+}
+
+.project-group-heading {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.project-group-intro {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ======================== Monogram Fallback ======================== */
+/* Monogram is generated as data:image/svg+xml via JS, no extra CSS needed */
 
 /* PRIVATE badge on project cards */
 .project-badge {
@@ -967,6 +1021,14 @@ h1, h2, h3, .nav-wordmark, .footer-wordmark {
   background: var(--blue);
   color: #000;
   border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* LIVE badge */
+.project-badge-live {
+  background: #10B981;
+  color: #000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
 }
 
 .project-card-private .project-language {

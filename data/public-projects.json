@@ -1,0 +1,14 @@
+[
+  {
+    "slug": "v0xryn-github-io",
+    "name": "V0XRYN.github.io",
+    "tagline": "This portfolio site — technology, Linux, AI, cybersecurity and creation.",
+    "description": "The V0XRYN digital brand website you are viewing. Built with vanilla HTML/CSS/JS, hosted on GitHub Pages. Features project fetching from GitHub API, client-side search, reveal animations, and a cyber-inspired design system.",
+    "tags": ["web", "portfolio", "github-pages", "vanilla-js"],
+    "category": "web",
+    "status": "active",
+    "logo": "assets/img/logos/placeholder.svg",
+    "repo_url": "https://github.com/V0XRYN/V0XRYN.github.io",
+    "homepage": "https://v0xryn.github.io/"
+  }
+]
